@@ -1,0 +1,40 @@
+{{#each errors}}
+<div class="alert alert-danger" role="alert"> {{text}}
+</div>
+{{else}} {{/each}}
+<form action="/catagery" method="POST" enctype="multipart/form-data" >
+  <div class="form-group">
+    <label for="exampleInputEmail1">Ad Title</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" name="adtitle" aria-describedby="emailHelp" placeholder="Ad Title">
+    <small id="emailHelp" class="form-text text-muted">We'll  share  olx your  anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Name</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" name="name" aria-describedby="emailHelp" placeholder="Name">
+    <small id="emailHelp" class="form-text text-muted">We'll never share olx your  anyone else.</small>
+  </div>
+   <div class="form-group">
+    <label for="exampleInputEmail1">Cell Number</label>
+    <input type="number" class="form-control" id="exampleInputEmail1" name="phone" aria-describedby="emailHelp" placeholder="Cell...">
+    <small id="emailHelp" class="form-text text-muted">We'll never share olx your  anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1"></label>Catagery</label>
+    <select class="form-control" name="catagery" id="exampleFormControlSelect1">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+  </div>
+    <div class="form-group">
+    <label for="exampleFormControlTextarea1"></label>Description</label>
+    <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+    <div class="form-group">
+    <label for="exampleFormControlFile1">Upload Photo</label>
+    <input type="file" class="form-control-file" name="photo" id="exampleFormControlFile1">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

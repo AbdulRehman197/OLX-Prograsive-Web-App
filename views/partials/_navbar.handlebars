@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">
+    <img src="http://www.freelogovectors.net/wp-content/uploads/2018/04/olx_logo_freelogovectors.net_.png" alt="Logo OLX" style="width:60px;">
+  </a>
+  <h3 class=" text-muted">OLX Proggrasive Web App</h3>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse " id="navbarTogglerDemo02">
+
+    <ul class="nav navbar-nav ml-auto">
+      <form class="navbar-form navbar-left" action="/action_page.php">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search Catagery" name="search">
+            {{!-- <input class="form-control" id="myInput" type="text" placeholder="Search.."> --}}
+
+          <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">Search</button>
+          </div>
+        </div>
+      </form>
+      {{#if user}}
+
+      <li class="nav-item active ">
+        <a class="nav-link" href="/posting">Submit a Free Ad
+          <span class="sr-only">(current)</span>
+        </a>
+        {{!--
+        <a class="nav-link" href="#">Home
+          <span class="sr-only">(current)</span>
+        </a> --}}
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="/users/logout">Logout</a>
+
+      </li>
+      {{else}}
+      <li class="nav-item active ">
+        <a class="nav-link" href="/posting">Submit a Free Ad
+          <span class="sr-only">(current)</span>
+        </a>
+        {{!--
+        <a class="nav-link" href="#">Home
+          <span class="sr-only">(current)</span>
+        </a> --}}
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/users/login">Login
+          <span class="sr-only">(current)</span>
+        </a>
+
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/users/register">Register</a>
+
+      </li>
+      {{/if}}
+
+    </ul>
+
+  </div>
+</nav>

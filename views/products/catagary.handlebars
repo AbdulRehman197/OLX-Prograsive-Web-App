@@ -1,0 +1,30 @@
+<div class="container">
+  <!-- Control the column width, and how they should appear on different devices -->
+
+{{#each product}}
+  <div class="row">
+    {{#each this}}
+    <div class="col-sm-6 col-md-4">
+      <a href="/catagery" style="text-decoration:none; color:black" role="button">
+      <div class="thumbnail">
+        <img src={{this.photo}} style="width:50%" class="rounded mx-auto d-block" alt="Generic placeholder thumbnail">
+      </div>
+
+      <div class="caption">
+        <h3 class="text-center">{{this.adtitle}}</h3>
+        <p class="text-center">{{this.description}}</p>
+        <p>
+          </a>
+        </p>
+         <a href="/catagery/edit/{{this.id}}" class="btn btn-dark btn-block mb-2">Edit</a>
+         <a href="/catagery/details/{{this.id}}" class="btn btn-info btn-block mb-2">See more...</a>
+       <form action="/catagery/{{this.id}}?_method=DELETE" method="POST">
+       <input type="hidden" value="DELETE" name="_method">
+       <input type="submit" class="btn btn-danger btn-block" value="Delete">
+       </form>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  {{/each}}
+</div>
