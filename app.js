@@ -21,10 +21,15 @@ var users = require('./routes/users');
 
 // Init App
 var app = express();
-
+// Handlebars Helpers 
+const {editFunction} = require('./helpers/hbs')
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs({defaultLayout:'layout'}));
+app.engine('handlebars', exphbs({
+  helpers:{
+    editFunction:editFunction
+  },
+  defaultLayout:'layout'}));
 app.set('view engine', 'handlebars');
 
 // BodyParser Middleware
@@ -33,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Set Static Folder
-app.use( '/public/upload',express.static('public/upload'));
+app.use('/public/upload',express.static(path.join(__dirname,'public/upload')));
 //method  override middleware
 app.use(methodOverride('_method'))
 // Express Session

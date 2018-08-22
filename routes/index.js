@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var multer  = require('multer')
+var path = require('path');
+
 
 // Require Product Model
 
-const Product = require('../models/product')
+const Product = require('../models/product');
+const User = require('../models/user');
 
 // Set Storage 
 const storage = multer.diskStorage({
@@ -12,7 +15,7 @@ const storage = multer.diskStorage({
         cb(null, './public/upload')
     },
     filename  :(req,file,cb)=>{
-        cb(null, Date.now().toISOString + file.originalname);
+        cb(null,file.fieldname + '-' + Date.now()+ path.extname(file.originalname));
     }
 })
 //Filter Image
@@ -39,6 +42,7 @@ router.get('/', function (req, res) {
 
 router.get('/catagery', (req, res) => {
     Product.find({})
+        .populate('User')
         .sort({ date: 'desc' })
         .then((product) => {
             const dataArray = [];
@@ -46,6 +50,7 @@ router.get('/catagery', (req, res) => {
             for(var i = 0; i<product.length;i += arraySize){
                 dataArray.push(product.slice(i,i+arraySize))
             }
+
             res.render('products/catagary', {
                 product: dataArray
             })
@@ -62,6 +67,8 @@ router.get('/posting', ensureAuthenticated, (req, res) => {
 router.post('/catagery',upload, (req, res) => {
     // res.render('products/catagary')
     // console.log(req.file)
+    console.log(req)
+    
    
     const errors = [];
     if (!req.body.adtitle) {
@@ -84,6 +91,7 @@ router.post('/catagery',upload, (req, res) => {
             description: req.body.description,
             photo: req.file.path,
             catagery: req.body.catagery,
+            search: req.body.search
         })
     } else {
         const newProduct = {
@@ -93,6 +101,8 @@ router.post('/catagery',upload, (req, res) => {
             description: req.body.description,
             photo: req.file.path,
             catagery: req.body.catagery,
+            search: req.body.search
+            
 
         }
         new Product(newProduct).save().then((product) => {
@@ -105,11 +115,10 @@ router.post('/catagery',upload, (req, res) => {
 
 })
 // Product info
-router.get('/catagery/details/:id',(req,res)=>{
+router.get('/catagery/:id',(req,res)=>{
     Product.findOne({
         _id:req.params.id
     }).then((product)=>{
-
         res.render('products/details',{
             product:product
         })
