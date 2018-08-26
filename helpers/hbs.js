@@ -1,14 +1,15 @@
 module.exports = {
-    editFunction : function(storyUser,logedUser,storyId,visible = true)  {
-        if(storyUser == logedUser){
+    editFunction : function(productUser,logedUser,productId,visible = true)  {
+        if(productUser == logedUser){
             if(visible){
             
-               return `<a href="/catagery/edit/${{storyId}}" class="btn btn-dark  mb-2">Edit</a>`
+               return `<a href="/catagery/edit/${{productId}}" class="btn btn-dark  mb-2">Edit</a>`
             }else {
-                return `<a href="/catagery/edit/${{storyId}}"></a>`
+                return `<a href="/catagery/edit/${{productId}}"></a>`
             }
         } else {
-            return '';
+            return 'Abdulrehman';
         }
+
     }
 }

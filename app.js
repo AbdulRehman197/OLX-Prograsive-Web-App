@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Set Static Folder
-app.use('/public/upload',express.static(path.join(__dirname,'public/upload')));
+app.use(express.static(path.join(__dirname,'public')));
 //method  override middleware
 app.use(methodOverride('_method'))
 // Express Session

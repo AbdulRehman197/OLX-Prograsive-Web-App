@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var multer  = require('multer')
+var multer = require('multer')
 var path = require('path');
 
 
@@ -11,11 +11,11 @@ const User = require('../models/user');
 
 // Set Storage 
 const storage = multer.diskStorage({
-    destination:(req,file,cb)=>{
+    destination: (req, file, cb) => {
         cb(null, './public/upload')
     },
-    filename  :(req,file,cb)=>{
-        cb(null,file.fieldname + '-' + Date.now()+ path.extname(file.originalname));
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 })
 //Filter Image
@@ -29,12 +29,19 @@ const storage = multer.diskStorage({
 
 // Init Upload
 const upload = multer({
-    storage:storage,
+    storage: storage,
     // filterFile:filterFile
 }).single('photo')
 // Get Homepage
 router.get('/', function (req, res) {
-            res.render('products/index')
+    Product.find({})
+        .populate('user')
+        .sort({ date: 'desc' })
+        .then((product => {
+            // console.log(product)
+        }))
+
+    res.render('products/index')
 });
 
 
@@ -42,13 +49,14 @@ router.get('/', function (req, res) {
 
 router.get('/catagery', (req, res) => {
     Product.find({})
-        .populate('User')
+        .populate('user')
         .sort({ date: 'desc' })
         .then((product) => {
+            // console.log(product)
             const dataArray = [];
             const arraySize = 3
-            for(var i = 0; i<product.length;i += arraySize){
-                dataArray.push(product.slice(i,i+arraySize))
+            for (var i = 0; i < product.length; i += arraySize) {
+                dataArray.push(product.slice(i, i + arraySize))
             }
 
             res.render('products/catagary', {
@@ -64,12 +72,11 @@ router.get('/posting', ensureAuthenticated, (req, res) => {
 })
 
 // prccess ad form
-router.post('/catagery',upload, (req, res) => {
+router.post('/catagery', upload, (req, res) => {
     // res.render('products/catagary')
     // console.log(req.file)
-    console.log(req)
-    
-   
+
+
     const errors = [];
     if (!req.body.adtitle) {
         errors.push({ text: 'Please enter the Ad Title' })
@@ -91,7 +98,8 @@ router.post('/catagery',upload, (req, res) => {
             description: req.body.description,
             photo: req.file.path,
             catagery: req.body.catagery,
-            search: req.body.search
+            search: req.body.search,
+            user:req.body._id
         })
     } else {
         const newProduct = {
@@ -99,10 +107,12 @@ router.post('/catagery',upload, (req, res) => {
             name: req.body.name,
             phone: req.body.phone,
             description: req.body.description,
-            photo: req.file.path,
+            photo: req.file.path.slice(6),
             catagery: req.body.catagery,
-            search: req.body.search
-            
+            search: req.body.search,
+            user:req.user._id
+
+
 
         }
         new Product(newProduct).save().then((product) => {
@@ -115,33 +125,33 @@ router.post('/catagery',upload, (req, res) => {
 
 })
 // Product info
-router.get('/catagery/:id',(req,res)=>{
+router.get('/catagery/:id', (req, res) => {
     Product.findOne({
-        _id:req.params.id
-    }).then((product)=>{
-        res.render('products/details',{
-            product:product
+        _id: req.params.id
+    }).then((product) => {
+        res.render('products/details', {
+            product: product
         })
     })
 })
 
 //edit form
-router.get('/catagery/edit/:id',ensureAuthenticated,(req,res)=>{
+router.get('/catagery/edit/:id', ensureAuthenticated, (req, res) => {
     // res.render('products/editad')
     Product.findOne({
-        _id :req.params.id
-    }).then((product)=>{
+        _id: req.params.id
+    }).then((product) => {
         // if( product.user != req.user.id){
         //     req.flash('error_mgs','Not Athorized');
         //     res.redirect('/users/login')
         // }
         res.render('products/editad', {
-           product:product
+            product: product
         });
     })
 })
 //edit form  process
-router.put('/catagery/:id',upload, ensureAuthenticated, (req, res) => {
+router.put('/catagery/:id', upload, ensureAuthenticated, (req, res) => {
     Product.findOne({
         _id: req.params.id
     }).then((product) => {
@@ -158,12 +168,12 @@ router.put('/catagery/:id',upload, ensureAuthenticated, (req, res) => {
     })
 
 })
- // Delete idea prcess
- router.delete('/catagery/:id',ensureAuthenticated,(req,res)=>{
+// Delete idea prcess
+router.delete('/catagery/:id', ensureAuthenticated, (req, res) => {
     Product.remove({
-        _id:req.params.id
-    }).then(()=>{
-        req.flash('success_mgs','Videos idea removed');
+        _id: req.params.id
+    }).then(() => {
+        req.flash('success_mgs', 'Videos idea removed');
         res.redirect('/catagery')
     })
 
