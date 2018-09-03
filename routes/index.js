@@ -1,3 +1,5 @@
+// import { read } from 'fs';
+
 var express = require('express');
 var router = express.Router();
 var multer = require('multer')
@@ -34,13 +36,6 @@ const upload = multer({
 }).single('photo')
 // Get Homepage
 router.get('/', function (req, res) {
-    Product.find({})
-        .populate('user')
-        .sort({ date: 'desc' })
-        .then((product => {
-            // console.log(product)
-        }))
-
     res.render('products/index')
 });
 
@@ -52,7 +47,12 @@ router.get('/catagery', (req, res) => {
         .populate('user')
         .sort({ date: 'desc' })
         .then((product) => {
-            // console.log(product)
+
+            //  product.forEach(function (nProduct) {
+            //      nProduct.photo = ('/public/upload/' + nProduct.photo);
+                //  console.log(product)
+            //  });
+
             const dataArray = [];
             const arraySize = 3
             for (var i = 0; i < product.length; i += arraySize) {
@@ -65,8 +65,69 @@ router.get('/catagery', (req, res) => {
         })
 
 })
+//search catagery
+router.get('/catagery/search/:catagery', (req, res) => {
+    // console.log(req.params)
+
+    let searchTerm = req.query.searchTerm;
+
+    let words = searchTerm.split(' ');
+
+    let rejex = words.map((word) => new RegExp( word, 'i' ))
+
+    Product.find({catagery:req.params.catagery, adtitle: {$in: rejex} })
+        .populate('user')
+        .sort({ date: 'desc' })
+        .then((product) => {
+
+            //  product.forEach(function (nProduct) {
+            //      nProduct.photo = ('/public/upload/' + nProduct.photo);
+                //  console.log(product)
+            //  });
+
+            const dataArray = [];
+            const arraySize = 3
+            for (var i = 0; i < product.length; i += arraySize) {
+                dataArray.push(product.slice(i, i + arraySize))
+            }
+
+            res.render('products/catagary', {
+                product: dataArray
+            })
+        })
+
+})
+
+//browse catagery post
+router.get('/catagery/browse/:catagery', (req, res) => {
+    // console.log(req.body)
+    // const word = req.body.search
+    Product.find({catagery:req.params.catagery})
+        .populate('user')
+        .sort({ date: 'desc' })
+        .then((product) => {
+            // product.indexOf('M')
+
+            //  product.forEach(function (nProduct) {
+            //      nProduct.photo = ('/public/upload/' + nProduct.photo);
+                //  console.log(product)
+            //  });
+
+            const dataArray = [];
+            const arraySize = 3
+            for (var i = 0; i < product.length; i += arraySize) {
+                dataArray.push(product.slice(i, i + arraySize))
+            }
+
+            res.render('products/catagary', {
+                product: dataArray
+            })
+        })
+
+})
+
 // posting the new ad
-router.get('/posting', ensureAuthenticated, (req, res) => {
+router.get('/posting', (req, res) => {
     res.render('products/posting')
 
 })
@@ -75,6 +136,7 @@ router.get('/posting', ensureAuthenticated, (req, res) => {
 router.post('/catagery', upload, (req, res) => {
     // res.render('products/catagary')
     // console.log(req.file)
+    // console.log(req)
 
 
     const errors = [];
@@ -91,15 +153,18 @@ router.post('/catagery', upload, (req, res) => {
     }
 
     if (errors.length > 0) {
-        res.render('products/posting', {
+        res.render('products/posting',ensureAuthenticated, {
             errors,
             adtitle: req.body.adtitle,
             name: req.body.name, phone: req.body.phone,
             description: req.body.description,
             photo: req.file.path,
             catagery: req.body.catagery,
+            price:req.body.price,
             search: req.body.search,
-            user:req.body._id
+            user:req.user.id
+            
+
         })
     } else {
         const newProduct = {
@@ -109,16 +174,15 @@ router.post('/catagery', upload, (req, res) => {
             description: req.body.description,
             photo: req.file.path.slice(6),
             catagery: req.body.catagery,
+            price:req.body.price,            
             search: req.body.search,
-            user:req.user._id
-
-
+            user:req.user.id
 
         }
         new Product(newProduct).save().then((product) => {
             // console.log(product)
             req.flash('success_mgs', 'Your Ad  Adding Succesfuly');
-            res.redirect('/catagery')
+            res.redirect('/')
         })
 
     }
@@ -126,6 +190,12 @@ router.post('/catagery', upload, (req, res) => {
 })
 // Product info
 router.get('/catagery/:id', (req, res) => {
+    console.log('THi is mt id ' +req.params.id )
+    if(req.params.id.indexOf('.') != -1){
+
+      return res.sendfile('../public/upload/'+req.params.id);
+   
+    }
     Product.findOne({
         _id: req.params.id
     }).then((product) => {
@@ -136,7 +206,7 @@ router.get('/catagery/:id', (req, res) => {
 })
 
 //edit form
-router.get('/catagery/edit/:id', ensureAuthenticated, (req, res) => {
+router.get('/catagery/edit/:id', (req, res) => {
     // res.render('products/editad')
     Product.findOne({
         _id: req.params.id
@@ -151,7 +221,7 @@ router.get('/catagery/edit/:id', ensureAuthenticated, (req, res) => {
     })
 })
 //edit form  process
-router.put('/catagery/:id', upload, ensureAuthenticated, (req, res) => {
+router.put('/catagery/:id', upload, (req, res) => {
     Product.findOne({
         _id: req.params.id
     }).then((product) => {
@@ -161,6 +231,7 @@ router.put('/catagery/:id', upload, ensureAuthenticated, (req, res) => {
             product.description = req.body.description,
             product.photo = req.file.path,
             product.catagery = req.body.catagery,
+            product.price =req.body.price,            
             product.save().then((product) => {
                 req.flash('success_mgs', 'Your Ad is updated');
                 res.redirect('/catagery')
@@ -169,11 +240,11 @@ router.put('/catagery/:id', upload, ensureAuthenticated, (req, res) => {
 
 })
 // Delete idea prcess
-router.delete('/catagery/:id', ensureAuthenticated, (req, res) => {
+router.delete('/catagery/:id', (req, res) => {
     Product.remove({
         _id: req.params.id
     }).then(() => {
-        req.flash('success_mgs', 'Videos idea removed');
+        req.flash('success_mgs', 'Ad removed');
         res.redirect('/catagery')
     })
 

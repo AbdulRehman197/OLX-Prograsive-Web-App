@@ -23,11 +23,13 @@ var users = require('./routes/users');
 var app = express();
 // Handlebars Helpers 
 const {editFunction} = require('./helpers/hbs')
+const {deleteFunction} = require('./helpers/hbs')
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({
   helpers:{
-    editFunction:editFunction
+    editFunction:editFunction,
+    deleteFunction:deleteFunction
   },
   defaultLayout:'layout'}));
 app.set('view engine', 'handlebars');

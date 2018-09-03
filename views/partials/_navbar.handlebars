@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/">
     <img src="http://www.freelogovectors.net/wp-content/uploads/2018/04/olx_logo_freelogovectors.net_.png" alt="Logo OLX" style="width:60px;">
@@ -12,17 +13,58 @@
   <div class="collapse navbar-collapse " id="navbarTogglerDemo02">
 
     <ul class="nav navbar-nav ml-auto">
-      <form class="navbar-form navbar-left" action="/catagery">
+      <form class="navbar-form navbar-left" action="/catagery/" onsubmit="return false;">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search Catagery" name="search">
-            {{!-- <input class="form-control" id="myInput" type="text" placeholder="Search.."> --}}
+          <div class="dropdown">
+            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Select Catagery
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" data-value="Mobile&tv" href="">Mobile&tv</a>
+              <a class="dropdown-item" data-value="Clothes" href="">Clothes</a>
+              <a class="dropdown-item" data-value="Accessories" href="">Accessories</a>
+              <a class="dropdown-item"  data-value="Sports" href="">Sports</a>
+              <a class="dropdown-item " data-value="Kids" href="">Kids</a>
+            </div>
+          </div>
 
+          <input id="category" type="hidden" name="category" />
+          <input type="text" class="form-control" id="searchInput" placeholder="Search Catagery" 
+            name="search"> {{!--
+          <input class="form-control" id="myInput" type="text" placeholder="Search.."> --}}
           <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button">Search</button>
+            <button class="btn btn-outline-secondary" id="searchSubmit" type="submit">Search</button>
           </div>
         </div>
       </form>
-      {{#if user}}
+
+      <script>
+        var selectedCategory = false;
+        var all_cats = document.querySelectorAll('.dropdown-item')
+        var showValue = document.querySelector('#dropdownMenuButton');
+
+        all_cats.forEach(function (cat) {
+          cat.onclick = function (e) {
+            e.preventDefault();
+            selectedCategory = e.target.getAttribute('data-value')
+            console.log(e.target.getAttribute('data-value'))
+          showValue.innerHTML = e.target.getAttribute('data-value')
+          }
+        })
+      searchSubmit.onclick = function () {
+          if (selectedCategory === false) {
+            alert('Select a category')
+            return
+          }
+          var searchTerm = searchInput.value
+
+          if (searchTerm.trim() === "") {
+            alert("Type your search")
+            return
+          }
+          location.href = '/catagery/search/' + selectedCategory + '?searchTerm=' + searchTerm
+        }
+      </script> {{#if user}}
 
       <li class="nav-item active ">
         <a class="nav-link" href="/posting">Submit a Free Ad
@@ -35,7 +77,6 @@
       </li>
       <li class="nav-item">
         <a class="nav-link " href="/users/logout">Logout</a>
-
       </li>
       {{else}}
       <li class="nav-item active ">
@@ -51,15 +92,11 @@
         <a class="nav-link" href="/users/login">Login
           <span class="sr-only">(current)</span>
         </a>
-
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/users/register">Register</a>
-
       </li>
       {{/if}}
-
     </ul>
-
   </div>
 </nav>

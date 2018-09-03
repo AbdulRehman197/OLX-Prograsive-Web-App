@@ -1,26 +1,26 @@
 <div class="container">
-<div class="row">
-  <div class="col-sm-8">
-    <div class="card">
-      <div class="card-body">
-         <div class="card" style="width: 100%;" name = "div">
-  <img src={{product.photo}} class="card-img-top"  alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-  </div>
-</div>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <div class="card" style="width: 100%;" name="div">
+            <img src={{product.photo}} class="card-img-top" width="70%" height="400px" alt="Card image cap" />
+            <div class="card-body">
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{product.adtitle}}</h5>
+          <p class="card-text">{{product.name}}</p>
+          <p class="card-text">{{product.phone}}</p>
+          <p class="card-text">{{product.description}}</p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-sm-4">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title" >{{product.adtitle}}</h5>
-        <p class="card-text">{{product.name}}</p>
-        <p class="card-text">{{product.phone}}</p>
-        <p class="card-text">{{product.description}}</p>
-      </div>
-    </div>
-  </div>
-</div>
 </div>
