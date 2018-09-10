@@ -34,7 +34,7 @@ router.post('/register', function (req, res) {
 	var errors = req.validationErrors();
 
 	if (errors) {
-		res.render('register', {
+		res.render('/register', {
 			errors: errors
 		});
 	}
@@ -47,7 +47,7 @@ router.post('/register', function (req, res) {
 				"$regex": "^" + email + "\\b", "$options": "i"
 		}}, function (err, mail) {
 				if (user || mail) {
-					res.render('register', {
+					res.render('users/register', {
 						user: user,
 						mail: mail
 					});
