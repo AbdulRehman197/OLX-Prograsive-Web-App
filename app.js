@@ -16,7 +16,8 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/loginapp');
 var db = mongoose.connection;
 
-var routes = require('./routes/index');
+var routes = require('./routes/message');
+var productsRoutes = require('./routes/products');
 var users = require('./routes/users');
 
 // Init App
@@ -24,12 +25,14 @@ var app = express();
 // Handlebars Helpers 
 const {editFunction} = require('./helpers/hbs')
 const {deleteFunction} = require('./helpers/hbs')
+const {getFavorite} = require('./helpers/hbs')
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({
   helpers:{
     editFunction:editFunction,
-    deleteFunction:deleteFunction
+    deleteFunction:deleteFunction,
+    getFavorite:getFavorite
   },
   defaultLayout:'layout'}));
 app.set('view engine', 'handlebars');
@@ -87,6 +90,7 @@ app.use(function (req, res, next) {
 
 
 app.use('/', routes);
+app.use('/', productsRoutes);
 app.use('/users', users);
 
 // Set Port

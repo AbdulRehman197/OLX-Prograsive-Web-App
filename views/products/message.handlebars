@@ -1,0 +1,29 @@
+<div class="jumbotron jumbotron">
+    <div class="container">
+        {{message}}
+         {{#each message}}
+        <div class="card">
+            <div class="card-body">
+                <form  style="float:right"  action="api/catagery/message/{{id}}?_method=DELETE" method="POST">
+                <input type="hidden" value="DELETE" name="_method">
+                <input type="submit" class="btn btn-outline-danger" value="Delete">
+            </form>
+                {{!-- <a href="/catagery/message/{{id}}" style="float:right; color:red" ><i class="fas fa-trash fa-lg"></i></a> --}}
+                <div style="float:left">
+                    <strong>Buyer Name</strong>
+                    <br>
+                    <hr>
+                    <strong>Message</strong>
+                </div>
+                <div>
+                    <strong class="text-left">{{user.name}}</strong>
+                    <hr>
+                    <p class="lead">{{message}}</p>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<script src="h ttps://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>

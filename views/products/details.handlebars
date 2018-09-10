@@ -19,8 +19,61 @@
           <p class="card-text">{{product.name}}</p>
           <p class="card-text">{{product.phone}}</p>
           <p class="card-text">{{product.description}}</p>
+
+
+
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Send Message</button>
+          <a href=""
+
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form method="POST" action="api/catagery/message/{{product.id}}">
+                    <div class="form-group">
+                      <label for="recipient-name" name="buyerName" class="col-form-label">Seller Name:</label>
+                      <input type="text" class="form-control" name="buyerName" value = {{product.user.name}} readonly  >
+                      
+                    </div>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Buyer Name:</label>
+                      <p>{{product.name}}</p>
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="col-form-label">Message:</label>
+                      <textarea class="form-control" name="message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send message</button>
+
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  {{!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+                  {{!--
+                  <a href="/catagery/message/{{product.id}}" class="btn btn primary">Send Message</a> --}}
+          
+
+                </div>
+              </div>
+            </div>
+            
+          </div>
         </div>
+        
       </div>
+      <br>
+      <div class="card">
+            <div class="card-body">
+              <a href="/catagery/message"><h3 class="text-center">Buyer Message</h3></a>
+              <a href="/catagery/favorite/{{product.id}}"><h3 class="text-center">Favorite Produts</h3></a>
+            </div>
+          </div>
     </div>
   </div>
 </div>

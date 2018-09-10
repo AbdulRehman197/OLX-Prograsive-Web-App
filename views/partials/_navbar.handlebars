@@ -1,3 +1,16 @@
+<script>
+
+  function onCategoryChange(elemenatet) {
+
+
+
+    category.value = elemenatet.value;
+
+    console.log(category.value)
+
+  }
+
+</script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/">
@@ -20,16 +33,16 @@
               Select Catagery
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" data-value="Mobile&tv" href="">Mobile&tv</a>
-              <a class="dropdown-item" data-value="Clothes" href="">Clothes</a>
-              <a class="dropdown-item" data-value="Accessories" href="">Accessories</a>
-              <a class="dropdown-item"  data-value="Sports" href="">Sports</a>
-              <a class="dropdown-item " data-value="Kids" href="">Kids</a>
+              <a class="dropdown-item" data-value="Mobile&tv" href="/catagery/search/Mobile&tv">Mobile&tv</a>
+              <a class="dropdown-item" data-value="Clothes" href="/catagery/search/Clothes">Clothes</a>
+              <a class="dropdown-item" data-value="Accessories" href="/catagery/search/Accessories">Accessories</a>
+              <a class="dropdown-item" data-value="Sports" href="/catagery/search/Sports">Sports</a>
+              <a class="dropdown-item" data-value="Kids" href="/catagery/search/Kids">Kids</a>
             </div>
           </div>
 
           <input id="category" type="hidden" name="category" />
-          <input type="text" class="form-control" id="searchInput" placeholder="Search Catagery" 
+          <input type="text" class="form-control" id="searchInput" placeholder="Search Catagery" onchange="onCategoryChange(categorySel)"
             name="search"> {{!--
           <input class="form-control" id="myInput" type="text" placeholder="Search.."> --}}
           <div class="input-group-append">
@@ -41,27 +54,31 @@
       <script>
         var selectedCategory = false;
         var all_cats = document.querySelectorAll('.dropdown-item')
-        var showValue = document.querySelector('#dropdownMenuButton');
+        var catName = document.querySelector('#dropdownMenuButton')
 
         all_cats.forEach(function (cat) {
           cat.onclick = function (e) {
             e.preventDefault();
             selectedCategory = e.target.getAttribute('data-value')
             console.log(e.target.getAttribute('data-value'))
-          showValue.innerHTML = e.target.getAttribute('data-value')
+            catName.innerHTML = e.target.getAttribute('data-value')
           }
         })
-      searchSubmit.onclick = function () {
+
+        searchSubmit.onclick = function () {
+
           if (selectedCategory === false) {
             alert('Select a category')
             return
           }
+
           var searchTerm = searchInput.value
 
-          if (searchTerm.trim() === "") {
-            alert("Type your search")
-            return
-          }
+          //if (searchTerm.trim() === "") {
+            //alert("Type your search")
+            //return
+          //}
+
           location.href = '/catagery/search/' + selectedCategory + '?searchTerm=' + searchTerm
         }
       </script> {{#if user}}
@@ -77,6 +94,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link " href="/users/logout">Logout</a>
+
       </li>
       {{else}}
       <li class="nav-item active ">
@@ -92,11 +110,15 @@
         <a class="nav-link" href="/users/login">Login
           <span class="sr-only">(current)</span>
         </a>
+
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/users/register">Register</a>
+
       </li>
       {{/if}}
+
     </ul>
+
   </div>
 </nav>
