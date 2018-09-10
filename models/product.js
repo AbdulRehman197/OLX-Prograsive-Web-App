@@ -34,6 +34,10 @@ const productSchema = mongoose.Schema({
         type:Schema.Types.ObjectId,
         ref:'User',
     },
+    message:{
+        type:Schema.Types.ObjectId,
+        ref:'Message',
+    },
     date: {
         type: Date,
         default:  Date.now

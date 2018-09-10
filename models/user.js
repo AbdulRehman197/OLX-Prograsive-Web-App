@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
+const Schema = mongoose.Schema;
+
 
 // User Schema
 var UserSchema = mongoose.Schema({
@@ -10,6 +12,10 @@ var UserSchema = mongoose.Schema({
 	password: {
 		type: String
 	},
+	favorite:[{
+		type:Schema.Types.ObjectId,
+        ref:'Product'
+	}],
 	email: {
 		type: String
 	},
