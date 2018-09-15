@@ -15,7 +15,7 @@ module.exports = {
     getFavorite:function(items, adId){
 
 console.log('checking')
-        return items.map(function(item){
+        return (items || []).map(function(item){
             return item.toHexString()
         }).indexOf(adId) == -1 ? "heart" : "'heart favorited'";
 
