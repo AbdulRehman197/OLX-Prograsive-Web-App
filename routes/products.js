@@ -28,6 +28,7 @@ const upload = multer({
     storage: storage,
     // filterFile:filterFile
 }).single('photo')
+
 // Get Homepage
 productsRouter.get('/', function (req, res) {
     res.render('products/index')
@@ -53,8 +54,29 @@ productsRouter.get('/catagery', (req, res) => {
 productsRouter.get('/posting', (req, res) => {
     res.render('products/posting')
 })
+
+//search catagery post
+productsRouter.get('/catagery/browse/:catagery', (req, res) => {
+    Product.find({ catagery: req.params.catagery })
+        .populate('user')
+        .sort({ date: 'desc' })
+        .then((product) => {
+            const dataArray = [];
+            const arraySize = 3
+            for (var i = 0; i < product.length; i += arraySize) {
+                dataArray.push(product.slice(i, i + arraySize))
+            }
+
+            res.render('products/catagary', {
+                product: dataArray
+            })
+        })
+
+})
+
+
 // prccess ad form
-productsRouter.post('/api/catagery', upload, (req, res) => {
+productsRouter.post('/api/catagery',ensureAuthenticated, upload, (req, res) => {
     const errors = [];
     if (!req.body.adtitle) {
         errors.push({ text: 'Please enter the Ad Title' })
@@ -112,7 +134,7 @@ productsRouter.get('/catagery/edit/:id', (req, res) => {
     })
 })
 //edit form  process
-productsRouter.put('/catagery/:id', upload, (req, res) => {
+productsRouter.put('/catagery/:id',ensureAuthenticated, upload, (req, res) => {
     Product.findOne({
         _id: req.params.id
     }).then((product) => {
@@ -131,7 +153,7 @@ productsRouter.put('/catagery/:id', upload, (req, res) => {
 
 })
 // Delete add prcess
-productsRouter.delete('/api/catagery/:id', (req, res) => {
+productsRouter.delete('/api/catagery/:id',ensureAuthenticated, (req, res) => {
     Product.remove({
         _id: req.params.id
     }).then(() => {
